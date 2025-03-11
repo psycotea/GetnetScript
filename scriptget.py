@@ -133,7 +133,6 @@ def remover_acentos(texto):
         return texto_sem_acentos
     return texto
 
-# Aplicar remoção de acentos
 for coluna in df_vendas.columns:
     if df_vendas[coluna].dtype == 'object':
         df_vendas[coluna] = df_vendas[coluna].apply(remover_acentos)
