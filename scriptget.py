@@ -164,7 +164,6 @@ def simplificar_lancamento(texto):
 # Aplicar a função de simplificação na coluna de lançamentos
 df_vendas['Descrição do Lançamento'] = df_vendas['Descrição do Lançamento'].apply(simplificar_lancamento)
 
-# Renomear colunas antes de salvar 
 df_vendas = df_vendas.rename(columns={
     'Data/Hora da Venda': 'Data',
     'Hora da Venda': 'Hora',
