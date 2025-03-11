@@ -1,7 +1,7 @@
 import pandas as pd
 import os
 from datetime import datetime
-import unicodedata  # Add this import for accent removal
+import unicodedata
 
 def consolidar_vendas_csv(pasta_vendas, arquivo_mapeamento):
     dados_consolidados = []
@@ -128,13 +128,12 @@ nome_arquivo_saida = f'vendas_consolidadas_getnet_{data_hora_atual}.csv'
 # Função para remover acentos
 def remover_acentos(texto):
     if isinstance(texto, str):
-        # Normaliza para forma de decomposição (NFD) e remove caracteres combinados
         texto_sem_acentos = unicodedata.normalize('NFD', texto)
         texto_sem_acentos = ''.join([c for c in texto_sem_acentos if not unicodedata.combining(c)])
         return texto_sem_acentos
     return texto
 
-# Aplicar remoção de acentos em todas as colunas de texto
+# Aplicar remoção de acentos
 for coluna in df_vendas.columns:
     if df_vendas[coluna].dtype == 'object':
         df_vendas[coluna] = df_vendas[coluna].apply(remover_acentos)
@@ -148,13 +147,13 @@ def simplificar_lancamento(texto):
         elif 'VENDA DEBITO A VISTA' in texto:
             return 'DEBITO A VISTA'
         elif 'PARCELADO EMISSOR' in texto:
-            # Extrair o número de parcelas (ex: PARCELADO EMISSOR 3X -> EMISSOR 3X)
+            # Extrair o número de parcelas
             partes = texto.split()
             if len(partes) >= 3 and 'X' in partes[-1]:
                 return f'EMISSOR {partes[-1]}'
             return 'EMISSOR'
         elif 'PARCELADO LOJISTA' in texto:
-            # Extrair o número de parcelas (ex: PARCELADO LOJISTA 4X -> PARCELADO 4X)
+            # Extrair o número de parcelas
             partes = texto.split()
             if len(partes) >= 3 and 'X' in partes[-1]:
                 return f'PARCELADO {partes[-1]}'
@@ -165,7 +164,7 @@ def simplificar_lancamento(texto):
 # Aplicar a função de simplificação na coluna de lançamentos
 df_vendas['Descrição do Lançamento'] = df_vendas['Descrição do Lançamento'].apply(simplificar_lancamento)
 
-# Renomear colunas antes de salvar (apenas no arquivo de saída, não afeta o script)
+# Renomear colunas antes de salvar 
 df_vendas = df_vendas.rename(columns={
     'Data/Hora da Venda': 'Data',
     'Hora da Venda': 'Hora',
